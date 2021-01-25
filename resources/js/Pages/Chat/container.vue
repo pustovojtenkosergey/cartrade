@@ -48,7 +48,9 @@ export default {
         }
     },
     watch: {
-        currentRoom() {
+        currentRoom(val, oldVal) {
+            if (oldVal.id)
+                this.disconnect(oldVal)
             this.connect()
         }
     },
@@ -56,13 +58,16 @@ export default {
         connect() {
             if (this.currentRoom.id) {
                 let vm = this
-                console.log('connect')
                 this.getMessages()
-                window.Echo.private("chat." + this.currentRoom.id )
+                Echo.private("chat." + this.currentRoom.id )
                     .listen('.message.new', e => {
+                        console.log({event: '.message.new', e})
                         vm.getMessages()
-                    })
+                    });
             }
+        },
+        disconnect(room) {
+            Echo.leave("chat." + room.id)
         },
         getRooms() {
             axios.get('/chat/rooms')

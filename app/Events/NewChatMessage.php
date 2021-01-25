@@ -20,7 +20,7 @@ class NewChatMessage implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param ChatMessage $chatMessage
      */
     public function __construct(ChatMessage $chatMessage)
     {
